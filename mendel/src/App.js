@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 
 function App() {
 
+  //** FETCH DATA ON PAGE LOAD **//
   const url = 'https://randomuser.me/api/?results=20';
 
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
     }
   }
 
+  // ** FLATTEN DATA ** //
   const flatten = (data) => {
     var result = {};
     function recurse(cur, prop) {
@@ -43,7 +45,7 @@ function App() {
     recurse(data, "");
     return result;
   }
-
+  // ** STORE FLATTENED DATA IN ARRAY ** //
   const flattenedObject = (arr, level) => {
     let flat = []
     for (let i = 0; i < arr.length; i++) {
@@ -51,7 +53,7 @@ function App() {
     }
     return flat;
   }
-
+  // ** RENDER HEADERS, SET SORT VARIABLE ON CLICK ** //
   const renderTableHeaders = (arr) => {
       return (
         <tr>
@@ -65,7 +67,7 @@ function App() {
         </tr>
       )
   }
-
+  // ** RENDER TABLE DATA TO BE SORTED ** //
   const renderSortedTable = (arr) => {
     return arr.map((location, i) => {
       return (
@@ -88,10 +90,10 @@ function App() {
   const [response, setResponse] = useState([])
   const [sorter, setSorter] = useState('number')
   const data = flattenedObject(response, 'location')
-
+  // ** UPDATE PAGE ON EACH SORT VARIABLE CHANGE ** //
   useEffect(() => {
   }, [sorter])
-  
+  // ** RENDER FULL TABLE SORTED VIA SORTER STATE VARIABLE ** //
   return (
     <div className="App">
       <table>
