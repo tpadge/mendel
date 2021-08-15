@@ -15,9 +15,9 @@ function App() {
       const response = await fetch(url);
       const json = await response.json();
       setResponse(json.results);
-      console.log(response)
-      console.log(json.results) //results
-      console.log(flatten(json.results[0].location)) //flattened
+      //console.log(response)
+      //console.log(json.results) //results
+      //console.log(flatten(json.results[0].location)) //flattened
     } catch (error) {
       console.log(error, 'error')
     }
@@ -47,18 +47,20 @@ function App() {
     return result;
   }
 
-  const flattenedObject = (object, level) => {
-    object.map((entry) => {
-      return flatten(entry)
-    })
+  const flattenedObject = (arr, level) => {
+    let flat = []
+    for (let i = 0; i < arr.length; i++) {
+      flat.push(flatten(arr[i][level])) 
+    }
+    return flat;
   }
 
-  const [response, setResponse] = useState()
-  const [data, setData] = useState([]);
+  const [response, setResponse] = useState([])
+  const data = flattenedObject(response, 'location')
 
   return (
     <div className="App">
-      {console.log(response)}
+      {console.log(data)}
     </div>
   );
 }
