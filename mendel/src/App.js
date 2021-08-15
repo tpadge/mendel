@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react';
 
@@ -15,9 +14,6 @@ function App() {
       const response = await fetch(url);
       const json = await response.json();
       setResponse(json.results);
-      //console.log(response)
-      //console.log(json.results) //results
-      //console.log(flatten(json.results[0].location)) //flattened
     } catch (error) {
       console.log(error, 'error')
     }
@@ -56,46 +52,53 @@ function App() {
     return flat;
   }
 
-  const renderTableData = (arr) => {
-    return arr.map((location, i) => {
-      return (
-      <tr key={i}>
-        <td>{location.number}</td>
-        <td>{location.name}</td>
-        <td>{location.city}</td>
-        <td>{location.state}</td>
-        <td>{location.country}</td>
-        <td>{location.postcode}</td>
-        <td>{location.latitude}</td>
-        <td>{location.longitude}</td> 
-        <td>{location.offset}</td>
-        <td>{location.description}</td>
-      </tr>
-      )
-    })
-  }
-
   const renderTableHeaders = (arr) => {
       return (
         <tr>
           {Object.keys(arr[0]).map((title, i) => {
             return (
-            <td key={i}>{title}</td>
+              <td><button key={i} onClick={() => setSorter(title)}>
+                Sort By: {title}
+              </button></td>
             )
           })}
         </tr>
       )
   }
 
+  const renderSortedTable = (arr) => {
+    return arr.map((location, i) => {
+      return (
+        <tr key={i}>
+          <td>{location.number}</td>
+          <td>{location.name}</td>
+          <td>{location.city}</td>
+          <td>{location.state}</td>
+          <td>{location.country}</td>
+          <td>{location.postcode}</td>
+          <td>{location.latitude}</td>
+          <td>{location.longitude}</td>
+          <td>{location.offset}</td>
+          <td>{location.description}</td>
+        </tr>
+      )
+    })
+  }
+
   const [response, setResponse] = useState([])
+  const [sorter, setSorter] = useState('number')
   const data = flattenedObject(response, 'location')
 
+  useEffect(() => {
+  }, [sorter])
+  
   return (
     <div className="App">
       <table>
         {renderTableHeaders(data)}
         <tbody>
-          {renderTableData(data)} 
+          {renderSortedTable(data.sort(function (a, b) { return a[sorter] - b[sorter] }))}
+          {console.log(sorter)}
         </tbody>
       </table>
     </div>
