@@ -33,11 +33,12 @@ function App() {
           recurse(cur[i], prop + "[" + i + "]");
         if (l == 0)
           result[prop] = [];
-      } else {
+      } 
+      else {
         var isEmpty = true;
         for (var p in cur) {
           isEmpty = false;
-          recurse(cur[p], prop ? prop + "." + p : p);
+          recurse(cur[p], prop ? p : p);
         }
         if (isEmpty && prop)
           result[prop] = {};
@@ -55,12 +56,48 @@ function App() {
     return flat;
   }
 
+  const renderTableData = (arr) => {
+    return arr.map((location, i) => {
+      return (
+      <tr key={i}>
+        <td>{location.number}</td>
+        <td>{location.name}</td>
+        <td>{location.city}</td>
+        <td>{location.state}</td>
+        <td>{location.country}</td>
+        <td>{location.postcode}</td>
+        <td>{location.latitude}</td>
+        <td>{location.longitude}</td> 
+        <td>{location.offset}</td>
+        <td>{location.description}</td>
+      </tr>
+      )
+    })
+  }
+
+  const renderTableHeaders = (arr) => {
+      return (
+        <tr>
+          {Object.keys(arr[0]).map((title, i) => {
+            return (
+            <td key={i}>{title}</td>
+            )
+          })}
+        </tr>
+      )
+  }
+
   const [response, setResponse] = useState([])
   const data = flattenedObject(response, 'location')
 
   return (
     <div className="App">
-      {console.log(data)}
+      <table>
+        {renderTableHeaders(data)}
+        <tbody>
+          {renderTableData(data)} 
+        </tbody>
+      </table>
     </div>
   );
 }
